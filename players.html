@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>球員查詢 - NBA 2026</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; }
+        .search-box { background: #eef2f3; padding: 30px; border-radius: 15px; max-width: 500px; margin: auto; }
+        input { padding: 10px; width: 250px; }
+        #res { margin-top: 20px; font-size: 20px; color: #1d428a; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <nav><a href="index.html">首頁</a> | <a href="analysis.html">分析</a> | <a href="players.html">查詢</a></nav>
+    <h1>球員大數據庫</h1>
+    <div class="search-box">
+        <input type="text" id="pName" placeholder="輸入 Curry, LeBron, Jokic...">
+        <button onclick="find()">搜尋</button>
+        <div id="res"></div>
+    </div>
+
+    <script>
+        const data = {
+            "curry": "Stephen Curry (勇士): 26.4 PPG, 5.1 APG, 三分命中率 41.2% (傳奇射手)",
+            "lebron": "LeBron James (湖人): 25.7 PPG, 7.3 RPG, 8.1 APG (季後賽模式開啟)",
+            "jokic": "Nikola Jokic (金塊): 29.8 PPG, 12.9 RPG, 9.1 APG (MVP 等級)",
+            "luka": "Luka Doncic (獨行俠): 33.5 PPG, 9.8 APG (得分王)"
+        };
+        function find() {
+            const n = document.getElementById('pName').value.toLowerCase();
+            document.getElementById('res').innerHTML = data[n] || "找不到該球員，請檢查拼字！";
+        }
+    </script>
+</body>
+</html>
