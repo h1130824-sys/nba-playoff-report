@@ -2,97 +2,86 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <title>NBA 2026 季後賽數據與奪冠預測報告</title>
+    <title>NBA 2026 季後賽分析報告</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; text-align: center; }
+        body { font-family: sans-serif; background-color: #f4f4f4; text-align: center; padding: 20px; }
         .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        h1 { color: #1d428a; } /* NBA Blue */
-        h3 { color: #333; margin-top: 30px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
-        
-        /* 查詢區塊 */
-        .search-section { background: #eef2f3; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-        input { padding: 10px; width: 60%; border: 1px solid #ccc; border-radius: 5px; }
-        button { padding: 10px 20px; background: #c8102e; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        #resultArea { margin-top: 20px; font-weight: bold; color: #333; min-height: 50px; }
-        
-        /* 圖表區塊 (設定大小) */
-        .chart-container { position: relative; height: 300px; width: 300px; margin: auto; }
-        
-        /* 對戰區塊 (Flexbox 排版) */
-        .vs-card { border: 2px solid #1d428a; margin: 15px 0; padding: 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+        h1 { color: #1d428a; }
+        .chart-container { width: 300px; height: 300px; margin: 20px auto; }
+        .vs-card { border: 2px solid #1d428a; margin: 20px 0; padding: 20px; border-radius: 10px; display: flex; justify-content: space-around; align-items: center; }
         .win-rate { font-size: 28px; color: #c8102e; font-weight: bold; }
-        .wins-text { font-size: 14px; color: #666; }
+        .search-section { background: #eef2f3; padding: 20px; border-radius: 10px; }
+        input { padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; background: #c8102e; color: white; border: none; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🏀 2026 NBA 季後賽分析與預測報告</h1>
-    <p>資訊報告 | 探索數據背後的冠軍之路</p>
-
-    <h3>一、 2026 聯盟奪冠總機率 (專業數據)</h3>
+    <h1>🏀 2026 NBA 季後賽分析與預測</h1>
+    
+    <h3>一、 聯盟奪冠總機率</h3>
     <div class="chart-container">
         <canvas id="crownChart"></canvas>
     </div>
 
     <h3>二、 季後賽對戰勝率預測</h3>
     <div class="vs-card">
-        <div>
-            <strong>(1) 雷霆 (OKC)</strong><br>
-            <span class="wins-text">例行賽勝場：<span id="t1-wins">64</span></span>
-        </div>
+        <div><strong>(1) 雷霆 (OKC)</strong><br>例行賽勝場：64</div>
         <div class="win-rate" id="match1-result">計算中...</div>
-        <div>
-            <strong>(8) 附加賽勝者</strong><br>
-            <span class="wins-text">例行賽勝場：<span id="t2-wins">42</span></span>
-        </div>
+        <div><strong>(8) 附加賽勝者</strong><br>例行賽勝場：42</div>
     </div>
 
     <h3>三、 核心球員數據查詢</h3>
     <div class="search-section">
-        <input type="text" id="playerName" placeholder="輸入球員姓名 (例如: Jokic, Shai)">
+        <input type="text" id="playerName" placeholder="輸入 Jokic 或 Shai">
         <button onclick="searchPlayer()">查詢</button>
-        <div id="resultArea"></div>
+        <div id="resultArea" style="margin-top:15px; font-weight:bold;"></div>
     </div>
-    
-    <p style="font-size: 12px; color: #888; margin-top: 50px;">模擬數據與分析來源：2025-2026 賽季中後期數據 | 資訊課專題專用</p>
 </div>
 
 <script>
-    // ======= JavaScript 邏輯開始 =======
+    // 確保網頁內容全部載入後才執行 JavaScript
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        // 1. 執行勝率計算
+        function calculate() {
+            let w1 = 64;
+            let w2 = 42;
+            let rate = (w1 / (w1 + w2)) * 100;
+            document.getElementById('match1-result').innerHTML = rate.toFixed(1) + "% vs " + (100 - rate).toFixed(1) + "%";
+        }
+        calculate();
 
-    // A. 預設球員數據
+        // 2. 繪製圓餅圖
+        const ctx = document.getElementById('crownChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['雷霆', '塞爾提克', '馬刺', '其他'],
+                datasets: [{
+                    data: [22.5, 18.2, 15.4, 43.9],
+                    backgroundColor: ['#1D428A', '#008348', '#EF4135', '#ddd']
+                }]
+            }
+        });
+    });
+
+    // 3. 球員查詢功能 (放在外面確保按鈕點得到)
     const playerData = {
-        "jokic": "Nikola Jokic (金塊): 29.8 PPG, 12.9 RPG, 9.1 APG (效率值 PER: 31.5)",
-        "luka": "Luka Doncic (獨行俠): 33.5 PPG, 9.2 RPG, 9.8 APG (效率值 PER: 28.7)",
-        "shai": "Shai Gilgeous-Alexander (雷霆): 30.1 PPG, 5.5 RPG, 6.2 APG (效率值 PER: 30.2)",
-        "wemby": "Victor Wembanyama (馬刺): 24.5 PPG, 11.2 RPG, 4.5 BPG (防守核心)"
+        "jokic": "Nikola Jokic: 29.8 PPG, 12.9 RPG, 9.1 APG",
+        "luka": "Luka Doncic: 33.5 PPG, 9.2 RPG, 9.8 APG",
+        "shai": "Shai Gilgeous-Alexander: 30.1 PPG, 5.5 RPG, 6.2 APG",
+        "wemby": "Victor Wembanyama: 24.5 PPG, 11.2 RPG, 4.5 BPG"
     };
 
     function searchPlayer() {
         const name = document.getElementById('playerName').value.toLowerCase();
-        const resultArea = document.getElementById('resultArea');
-        if (playerData[name]) {
-            resultArea.innerHTML = "🔍 查詢結果：<br>" + playerData[name];
-        } else {
-            resultArea.innerHTML = "請試試 Jokic, Luka 或 Shai。";
-        }
+        const result = document.getElementById('resultArea');
+        result.innerHTML = playerData[name] ? "🔍 " + playerData[name] : "找不到資料，請試試 Jokic 或 Shai";
     }
+</script>
 
-    // B. 勝率計算公式
-    function calculateWinRate(wins1, wins2) {
-        let rate1 = (wins1 / (wins1 + wins2)) * 100;
-        return rate1.toFixed(1);
-    }
-
-    // C. 圓餅圖與勝率計算 (網頁載入時執行)
-    window.onload = function() {
-        // [C-1] 畫圓餅圖 (奪冠機率)
-        const ctx = document.getElementById('crownChart').getContext('2d');
-        const crownChart = new Chart(ctx, {
-            type: 'pie', // 設定圖表類型為圓餅圖
-            data: {
-                labels: ['雷霆 (22.5%)', '塞爾提克 (18.2%)', '馬刺 (15.4%)', '其他球隊'], // 數據標籤
-                datasets: [{
-                    data: [22.5, 1
+</body>
+</html>
